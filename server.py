@@ -82,6 +82,8 @@ class login(object):
         if (name,passwd) in allowed:     
             session.login = 1
             raise web.seeother("/")
+        else: 
+            raise web.seeother("/login")    
 class logout(object): 
     def GET(self): 
         session.kill()
