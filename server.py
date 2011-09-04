@@ -169,7 +169,6 @@ class import_database(object):
                 
                 q = "UPDATE main.PROCTOR SET q1=$q1,q1=$q2 WHERE student_id=$student_id and class_id=$class_id"
                 db.query(q,vars=proctor)
-                db.commit()
                 
             else:     
                 #need to use logical or on q1/q2 from old and new dbs

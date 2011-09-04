@@ -1,0 +1,1 @@
+A simple web application for teachers to record all interactions with students. It can import student lists from a csv file. The application uses the web.py micro framework.
