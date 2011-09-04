@@ -24,9 +24,8 @@ from model import del_class, insert_class
 
 db = web.database(dbn='sqlite', db='student_logs.db')
 
-allowed = (
-    ('sharon','Pur36pul'),
-)
+#need to make your own auth.txt file with username/passwords
+allowed = [tuple(line.strip().split(",")) for line in open('auth.txt','rb')]
 
   
 
