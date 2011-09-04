@@ -5,6 +5,11 @@ import re
 import base64
 import os
 
+import sys, os
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+
 import web
 from web import form
 
