@@ -43,12 +43,9 @@ urls = ("/login","login",
        "/search","search")
        
 app = web.application(urls, globals())
+application = app.wsgifunc()
 
-if web.config.get('_session') is None:
-    session = web.session.Session(app, web.session.DiskStore('sessions'), {'login': 0})
-    web.config._session = session
-else:
-    session = web.config._session
+session = web.session.Session(app, web.session.DiskStore('sessions'), {'login': 0})
 
 
 def time_fmt(timestr): 
@@ -656,9 +653,6 @@ class proctor(object):
         
         raise web.seeother('/classes/%s/students/%s'%(class_id,student_id))
   
-def launch_browser():
-    import webbrowser
-    webbrowser.open_new("http://localhost:8080/classes")      
     
 if __name__ == "__main__":
     #from multiprocessing import Process
