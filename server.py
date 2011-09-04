@@ -7,13 +7,14 @@ import os
 
 import sys, os
 abspath = os.path.dirname(__file__)
-sys.path.append(abspath)
-os.chdir(abspath)
+if abspath: 
+    sys.path.append(abspath)
+    os.chdir(abspath)
 
 import web
 from web import form
 
-#web.config.debug = False
+web.config.debug = False
 
 from roster_parser import parse_roster
 
