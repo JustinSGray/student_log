@@ -1,0 +1,25 @@
+$def with (header,search_term,students)
+
+$:header
+
+<h2> Matches for "$search_term"</h2>
+<div class="table">
+<ul>
+    <li style="width:100px;">SepID</li>
+    <li style="width:150px;">First Name</li>
+    <li style="width:150px;">Last Name</li>
+    <li style="width:150px;">Phone Number</li>
+</ul>
+$for s in students: 
+    $if s.class_id:
+        <a href="/classes/$s.class_id/students/$s.student_id">
+    $else: 
+        <a href="/students/$s.student_id">
+    <ul>
+        <li style="width:100px;">$s.student_id</li>
+        <li style="width:150px;">$s.first_name</li>
+        <li style="width:150px;">$s.last_name </li>
+        <li style="width:150px;">$s.phone_number</li>
+    </ul>
+    </a>
+</div>

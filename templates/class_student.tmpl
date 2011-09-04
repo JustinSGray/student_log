@@ -1,0 +1,112 @@
+$def with (header,class_student,new_proc,records,new_rec)
+
+$code: 
+    student_info_keys = [
+        ('student_id','SepID',52,'other'),
+        ('last_name','Last Name',90,'text'),
+        ('first_name','First Name',90,'text'),
+        ('dec','DEC',30,'checkbox'),
+        ('parent_name',"Parent's Name",150,'text'),
+        #('DOB','DOB',80,'text'),
+        ('grade','Grade',35,'text'), 
+        ('phone_number','Phone #',140,'text'),
+        #('status','Status',40,'text'), 
+        ('r_score_in','R in',42,'text'),
+        ('w_score_in','W in',42,'text'),
+        ('r_score_out','R out',42,'text'),
+        ('w_score_out','W out',42,'text')]
+
+$:header  
+
+<h1><a href="/classes/$class_student.class_id">$class_student.name</a> , $class_student.first_name $class_student.last_name </h1>
+<form method="POST" action="/students/$class_student.student_id" class="autosubmit">
+<div class="table">
+    <ul class="header">
+    $for k,name,w,type in student_info_keys: 
+        <li style="width:$(w)px;">$name</li>    
+    </ul>
+    <ul>    
+    $for k,name,w,type in student_info_keys: 
+        <li style="width:$(w)px;" 
+        $if type=='text': class="select"
+        >
+          $if type=='text':
+            <input type="text" name="$k" value="$class_student[k]" style="width:100%"/>
+          $elif type=='checkbox':
+            <input type="checkbox" class="$(k)_" name="$k" 
+                $if class_student[k]:checked="checked" >
+          $else: 
+            $class_student[k]  
+        </li>
+    </ul>
+</div>
+
+<br style="clear:both;"/>
+
+
+<h2>Student Notes:</h2>
+<textarea rows="5" cols="80" name="notes">$class_student.notes</textarea>
+$#<label for="Save"></label><button id="Save" name="Save">Save</button>
+</form>
+<div class="float_left">
+<h2>Other Info</h2>
+<form method="POST" action="/classes/$class_student.class_id/students/$class_student.student_id" class="autosubmit">
+    status <select class="status_" name="status">
+        <option value="ENR"
+        $if class_student.status=="ENR": SELECTED
+        >ENR</option>
+        <option value="WD "
+        $if class_student.status=="WD ": SELECTED
+        >WD</option>
+        <option value="ADM"
+        $if class_student.status=="ADM": SELECTED
+        >ADM</option>
+    </select> 
+    &nbsp&nbsp&nbsp
+    teacher assignment <select class="teach_assn_" name="teach_assn">
+        <option value="GenEd"
+        $if class_student.teach_assn=="GenEd": SELECTED 
+        >GenEd</option> 
+        <option value="DEC "  
+        $if class_student.teach_assn=="DEC ": SELECTED 
+        >DEC</option> 
+        <option value="LIFT" 
+        $if class_student.teach_assn=="LIFT": SELECTED
+        >LIFT</option>
+        <option value="Orange" 
+        $if class_student.teach_assn=="Orange": SELECTED
+        >Orange</option>
+    </select> 
+    $#<label for="Save"></label><button id="Save" name="Save">Save</button>
+</form>
+</div>
+
+<div="float_right">
+<h2>Proctor:</h2>
+<form method="POST" action="/classes/$class_student.class_id/students/$class_student.student_id/proctor" class="autosubmit"> 
+  $new_proc.render()
+</form>
+</div>
+<br style="clear:both;" />
+<h2>Contact Notes:</h2>
+<form method="POST" action="/classes/$class_student.class_id/students/$class_student.student_id/records"> 
+    $:new_rec.render()
+</form>
+
+<br style="clear:both;"/>
+<br style="clear:both;"/>
+
+<div class="table">
+  <ul class="header">
+    <li style="width:150px;">Class Name</li>
+    <li style="width:150px;">Date/time</li>
+    <li style="width:500px;">Notes</li> 
+  </ul>
+  $for rec in records:
+    <ul>
+      <li style="width:150px;height:auto;min-height:60px;">$rec.name</li>
+      <li style="width:150px;height:auto;min-height:60px;">$time_fmt(rec.datetime)</li>
+      <li style="width:500px; height:auto;min-height:60px;">$rec.notes</li>
+      
+    </ul>
+</div>

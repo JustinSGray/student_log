@@ -1,0 +1,120 @@
+$def with ()
+
+<header>
+    <title>Daily Student Log</title>
+    <LINK REL=StyleSheet HREF="/static/student_log.css" TYPE="text/css">
+    
+    <script type="text/javascript" src="/static/jquery-1.4.4.min.js"></script> 
+    <script type="text/javascript" src="/static/jquery-2.43.form.js"></script> 
+    
+    <link type="text/css" href="/static/jquery-ui-1.8.7.custom/css/ui-lightness/jquery-ui-1.8.7.custom.css" rel="stylesheet" />	
+	<script type="text/javascript" src="/static/jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js"></script>
+    
+    <script type="text/javascript"> 
+        // wait for the DOM to be loaded 
+        
+        function teach_assn_color(){
+            $$(".teach_assn_").each(function(){
+                if($$(this).val() == "LIFT"){
+                    $$(this).parents('ul').css('background-color','#99CC66');   
+                }
+                else if($$(this).val() == "DEC "){
+                    $$(this).parents('ul').css('background-color','#99CCFF');
+                }
+                else if($$(this).val() == "GenEd"){
+                    $$(this).parents('ul').css('background-color','transparent');
+                }
+                else if($$(this).val() == "Orange"){
+                    $$(this).parents('ul').css('background-color','#F88017');
+                }
+            }) 
+        }
+        
+        $$(document).ready(function() { 
+            // bind 'myForm' and provide a simple callback function 
+            $$('.autosubmit').ajaxForm(); 
+            
+            $$('.autosubmit').find('*').change(function(event){
+                console.log('submitting')
+                $$(event.target).parents('form').submit();
+                $$(event.target).css('background-color','white');
+            });
+            
+            $$('.autosubmit').find('*').keypress(function(event){
+                $$(event.target).css('background-color','yellow');
+            });
+            
+            $$('a.del_class').click(function(){
+                var sure = confirm("Are you sure you want delete that class? All data including all records will be lost!");
+           		if (!sure){
+           			return false;
+           		}
+           		var sure2 = confirm("Are you really sure? This will permenantly delete all the data for that class!");
+         	    if (!sure2) {
+             	   return false
+         		}
+
+            })
+            
+            
+            var options = { 
+            	clearForm: true,
+            	beforeSubmit: function(arr,jsform,options){
+            		var ids = [];
+            		$$('[name="msg"]:checked').each(function(index,value){
+            		    ids.push(value['value']);
+            		});
+            		if (ids.length < 1){
+            		    alert("No students selected!");
+            		    return false;
+            		};
+            		if (arr[0]['value']==""){
+            		    alert("Type a note to put in students records!");
+            		    return false;
+            		};
+            		arr.push({name:'ids',value:ids.join(",")});
+            		var sure = confirm("Are you sure you want to record a note for all "+ ids.length+" students?")
+            		if (!sure){
+            			return false;
+            		}
+            	}
+		    }; 
+            
+            $$('#multi_student_msg').ajaxForm(options);
+            
+            $$('.tabs').tabs();
+            
+            teach_assn_color()
+            $$('.teach_assn_').change(teach_assn_color)
+            
+            var top = $$('.class_header_row').offset().top - parseFloat($$('.class_header_row').css('marginTop').replace(/auto/,0));    
+            var left = $$('.class_header_row').offset().left - parseFloat($$('.class_header_row').css('marginLeft').replace(/auto/,0));   
+ 
+            $$(window).scroll(function () {
+                // what the y position of the scroll is
+                var y = $$(this).scrollTop();
+                var x = $$(this).scrollLeft();
+                
+            
+                // whether that's below the form
+                if (y >= top) {
+                // if so, ad the fixed class
+                $$('.class_header_row').css('position','fixed');
+                $$('.class_header_row').css('left',left-x);
+                } 
+                else {
+                // otherwise remove it
+                $$('.class_header_row').css('position','absolute');
+                $$('.class_header_row').css('left','auto');
+                }
+            });        
+        }); 
+    </script> 
+</header>    
+<a href="/logout">LogOut</a> &nbsp &nbsp &nbsp &nbsp 
+<a href="/export">Export Database</a> &nbsp &nbsp &nbsp &nbsp
+<a href="/import">Import Database</a> 
+<form method="POST" action="/search" class="search_box">
+  <input type="text" name="search_term" size=20>
+  <button id="submit" name="submit">search</button>
+</form>

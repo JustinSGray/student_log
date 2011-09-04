@@ -1,0 +1,37 @@
+$def with (header,active_classes,other_classes)
+
+$:header
+
+<h2> New Class </h2>
+<form method="POST" action="/classes">
+    <input type="text" size="20" name="name">
+    <label for="Save"></label><button id="Save" name="Save">Save</button>
+</form>
+
+$for class_set,header_text in ((active_classes,'Active Classes'),(other_classes,'Older Classes')):
+    <h2>$header_text</h2>
+    <div class="table">
+    <ul class="header">
+        <li style="width:10px">&nbsp</li>
+        <li style="width:150px;">Name</li>
+        <li style="width:80px;">Date</li>
+        <li style="width:30px;">X</li>
+    </ul>
+    
+    $for class_ in class_set: 
+        <ul>
+            <li style="width:10px;">
+                <form method="POST" action="/classes/$class_.class_id" class="autosubmit">
+                    <input type="checkbox" class="active_" name="active" 
+                    $if class_.active:checked="checked">
+                    $#<label for="Save"></label><button id="Save" name="Save">Save</button>
+                </form>
+            </li>
+            <a href="/classes/$class_.class_id">
+            <li style="width:150px;">$class_.name</li>
+            <li style="width:80px;">$class_.date</li>
+            </a>
+            <li style="width:30px;"><a class="del_class" href="/classes/$class_.class_id/del">delete</a></li>
+        </ul>
+    </div>
+    <br style="clear:both" />

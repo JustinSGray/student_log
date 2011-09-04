@@ -1,0 +1,157 @@
+$def with (header,class_,active_students,w_students,a_students,error)
+
+$code: 
+    student_row_keys = [
+        ('student_id','SepID',40),
+        ('last_name','Last Name',80),
+        ('first_name','First Name',80),
+        ('dec','DEC',18),
+        ('q1','P1 P2',40),
+        ('teach_assn','Teacher',65),
+        ('status','Status',55),
+        ('parent_name',"Parent's Name",150),
+        #('DOB','DOB',75),
+        ('grade','Gr',20), 
+        ('phone_number','Phone #',110),
+        ('r_score_in','R in',40),
+        ('w_score_in','W in',40),
+        ('r_score_out','R out',40),
+        ('w_score_out','W out',40)]
+    student_rows = ((active_students,'Enrolled'),(w_students,'Withdrawn'),(a_students,'Admitted'))
+
+$:header 
+
+<body>
+<h1><a href="/classes">Classes</a> : $class_.name</h1>
+<a href="/classes/$class_.class_id/students/new">add a student</a>
+<br/>
+<br/>
+Load Roster:<br/>
+
+<form method="POST" enctype="multipart/form-data" action="/classes/$class_.class_id/students"
+$if error: style="color:red; border:1px red solid;"
+>
+  <input type="file" name="roster" /> <input type="submit" />
+  $if error: $error
+</form>
+
+<br/>
+Add notes to all checked students: 
+<form id="multi_student_msg" method="POST" action="/classes/$class_.class_id/multi-student-record">
+<textarea rows="5" cols="80" name="notes"></textarea><br/>
+<input type="submit" value="Send Msg">
+</form>
+<br/>
+
+<div class='tabs'>
+<ul>
+
+$for student_list,header_name in student_rows: 
+    <li><a href="#$header_name">$header_name</a></li>
+</ul>
+
+$for student_list,header_name in student_rows:
+    
+    $#<h2>$header_name Students: </h2>
+    <div class="table" id="$header_name">
+    $for s in student_list:     
+        $if loop.first: 
+            <div class="class_header_row_wrapper">
+            <ul class="header class_header_row">
+            <li style="width:15px;">Msg</li>
+            <li style="width:15px;">#</li>
+            $for k,name,w in student_row_keys: 
+                <li style="width:$(w)px;" class="text">$name</li>    
+            </ul>
+            </div>
+        <ul 
+        $if loop.first: style="margin-top:20px;"
+        >  
+        <li style="width:15px;"><form><input type="checkbox" name="msg" value=$s['student_id'] /> </form></li>
+        <li style="width:15px;">$loop.index</li>
+        $for k,name,w in student_row_keys: 
+            $if k=='status':
+                <li style="width:$(w)px;" class="select">
+                <form method="POST" action="/classes/$class_.class_id/students/$s.student_id" class="autosubmit">
+                    <select class="$(k)_" name="$k">
+                        <option value="ENR"
+                        $if s[k]=="ENR": SELECTED
+                        >ENR</option>
+                        <option value="WD "
+                        $if s[k]=="WD ": SELECTED
+                        >WD</option>
+                        <option value="ADM"
+                        $if s[k]=="ADM": SELECTED
+                        >ADM</option>
+                    </select> 
+                    $#<label for="Save"></label><button id="Save" name="Save">Save</button>
+                </form>
+            $elif k=='teach_assn':
+                <li style="width:$(w)px;" class="select">
+                <form method="POST" action="/classes/$class_.class_id/students/$s.student_id" class="autosubmit">
+                    <select class="$(k)_" name="$k">
+                      <option value="GenEd"
+                      $if s[k]=="GenEd": SELECTED 
+                      >GenEd</option> 
+                      <option value="DEC "  
+                      $if s[k]=="DEC ": SELECTED 
+                      >DEC</option> 
+                      <option value="LIFT" 
+                      $if s[k]=="LIFT": SELECTED
+                      >LIFT</option>
+                      <option value="Orange"
+                      $if s[k]=="Orange": SELECTED
+                      >Orange</option>
+                    </select> 
+                    $#<label for="Save"></label><button id="Save" name="Save">Save</button>
+                </form>
+                
+            $elif k == 'dec':
+                <li style="width:$(w)px;" class="checkbox">
+                <form method="POST" action="/students/$s.student_id" class="autosubmit">
+                    <input type="checkbox" class="$(k)_" name="$k" 
+                    $if s[k]:checked="checked" 
+                    >
+                    $#<label for="Save"></label><button id="Save" name="Save">Save</button>
+                </form>
+                </li>
+            $elif k == 'q1': 
+                <li style="width:$(w)px" class="checkbox">
+                    
+                    <form method="POST" action="/classes/$class_.class_id/students/$s.student_id/proctor" class="autosubmit">
+                    
+                    <input type="checkbox" class="$(k)_" name="$k" 
+                    $if s[k]: checked="checked" 
+                    >
+                    
+                    <input type="checkbox" class="q2_" name="q2" 
+                    $if s['q2']: checked="checked"  
+                    >
+                    
+                    $#<label for="Save"></label><button id="Save" name="Save">Save</button>
+                    
+                    </form>
+                   
+                </li>
+                
+            $elif 'score' in k: 
+                <li class="checkbox"
+                style="width:$(w)px;
+                $if s[k] and s[k] >=400: background-color:yellow;
+                "
+                >
+                    $s[k]
+                </li>
+            $else: 
+                <a href="/classes/$class_.class_id/students/$s.student_id">
+                <li style="width:$(w)px;" class="text">$s[k]</li>
+                </a>
+               
+        </ul>
+        <br style="clear:both"/>
+    </div> <!--close table-->
+    
+    
+</div> <!--close tabs -->
+
+</body>

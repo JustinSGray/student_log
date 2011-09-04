@@ -1,0 +1,60 @@
+$def with (header,class_,new_proc)
+
+$code: 
+    student_info_keys = [
+        ('student_id','SepID',52,'text',5),
+        ('last_name','Last Name',90,'text',12),
+        ('first_name','First Name',90,'text',12),
+        ('dec','DEC',30,'checkbox',5),
+        ('parent_name',"Parent's Name",150,'text',25),
+        ('DOB','DOB',80,'text',10),
+        ('grade','grade',35,'text',2), 
+        ('phone_number','phone #',100,'text',15),
+        #('status','status',40,'text',3), 
+        ('r_score_in','r in',40,'text',3),
+        ('w_score_in','w in',40,'text',3),
+        ('r_score_out','r out',40,'text',3),
+        ('w_score_out','w out',40,'text',3)]
+
+$:header  
+
+<h1>Add a student to <a href="/classes/$class_.class_id">$class_.name</a> </h1>
+<form method="POST" action="/classes/$class_.class_id/students/new">
+<div class="table">
+    <ul>
+    $for k,name,w,type,size in student_info_keys: 
+        <li style="width:$(w)px;">$name</li>    
+    </ul>
+    <ul>    
+    $for k,name,w,type,size in student_info_keys: 
+        <li style="width:$(w)px;">
+          $if type=='text':
+            <input type="text" name="$k" size="$size"/>
+          $elif type=='checkbox':
+            <input type="checkbox" name="$k"/>
+          $else: 
+            xx  
+        </li>
+    </ul>
+</div>
+<br style="clear:both;"/>
+
+
+<h2>Student Notes:</h2>
+<textarea rows="5" cols="80" name="notes"></textarea>
+
+<h2>Other Info</h2>
+    status <select class="status_" name="status">
+        <option value="ENR">ENR</option>
+        <option value="WD ">WD</option>
+        <option value="ADM">ADM</option>
+    </select> 
+    &nbsp&nbsp&nbsp
+    teacher assignment <select class="teach_assn_" name="teach_assn">
+        <option value="GenEd">GenEd</option> 
+        <option value="DEC ">DEC</option> 
+        <option value="LIFT">LIFT</option>
+    </select> 
+    <br/><br/>
+    <label for="Save"></label><button id="Save" name="Save">Save</button>
+</form>

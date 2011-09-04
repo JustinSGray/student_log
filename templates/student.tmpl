@@ -1,0 +1,42 @@
+$def with (header,student,classes)
+
+$code: 
+    student_info_keys = [
+        ('student_id','SepID',52),
+        ('last_name','Last Name',90),
+        ('first_name','First Name',90),
+        ('dec','DEC',30),
+        ('parent_name',"Parent's Name",150),
+        ('DOB','DOB',60),
+        ('grade','grade',35), 
+        ('phone_number','phone #',100),
+        ('r_score_in','r in',40),
+        ('w_score_in','w in',40),
+        ('r_score_out','r out',40),
+        ('w_score_out','w out',40)]
+
+$:header 
+
+<h1> $student.first_name $student.last_name </h1>
+
+<div class="table">
+    <ul>
+    $for k,name,w in student_info_keys: 
+        <li style="width:$(w)px;">$name</li>    
+    </ul>
+    <ul>    
+    $for k,name,w in student_info_keys: 
+        <li style="width:$(w)px;">$student[k]</li>
+    </ul>
+</div>
+<br style="clear:both;"/>
+
+<h2>Notes:</h2>
+<textarea rows="5" cols="80">$student.notes</textarea>
+
+<h2> Classes </h2>
+<ul>
+    $for c in classes: 
+        <li><a href="/classes/$c.class_id/students/$student.student_id">$c.name</a></li>
+</ul>
+
