@@ -69,8 +69,6 @@ def authenticate():
         return 
     raise web.seeother('/login')
     
-def clean_text(txt):
-    return unicode(txt,errors="ignore")
     
         
 		
@@ -602,7 +600,7 @@ class records(object):
         authenticate()
  
         vars={'class_id':class_id,'student_id':student_id,
-                'notes':clean_text(web.input().notes),'record_id':record_id}
+                'notes':web.input().notes,'record_id':record_id}
         if record_id: 
             q="""UPDATE RECORDS SET notes=$notes
                  WHERE record_id=$record_id"""
