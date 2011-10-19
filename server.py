@@ -450,7 +450,7 @@ class new_classes_students(object):
         add_to_class = """INSERT INTO CLASSES_STUDENTS 
         VALUES($class_id,$student_id,$status,$teach_assn)
         """ 
-        
+
         new_student = """INSERT INTO STUDENTS VALUES($student_id,
                      $first_name,
                      $last_name,
@@ -466,8 +466,7 @@ class new_classes_students(object):
                      $r_score_out,$notes)"""
         
         for student_class in ret: #then there is already a student
-            
-            if student_class.class_id:
+            if student_class.class_id==class_id:
                 raise web.seeother('/classes/%s/students/%s'%(class_id,params['student_id']))
             else: 
                 db.query(add_to_class,params)
@@ -494,8 +493,7 @@ class classes_students(object):
         WHERE CLASSES.class_id=$class_id AND STUDENTS.student_id=$student_id
         """
         
-        class_student = db.query(q,vars=vars)[0]
-        
+        class_student = db.query(q,vars=vars)[0]        
         q = """SELECT * FROM RECORDS
         JOIN CLASSES ON RECORDS.class_id=CLASSES.class_id
         WHERE RECORDS.student_id=$student_id
