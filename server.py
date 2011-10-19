@@ -68,6 +68,11 @@ def authenticate():
     if session.login==1: 
         return 
     raise web.seeother('/login')
+    
+def clean_text(txt):
+    return unicode(txt,errors="ignore")
+    
+        
 		
 class login(object): 
     def GET(self):  
@@ -597,10 +602,9 @@ class records(object):
     def POST(self,class_id,student_id,record_id=""): 
         ''' create a new record'''
         authenticate()
-        form = new_record() 
-        form.validates()
+ 
         vars={'class_id':class_id,'student_id':student_id,
-                'notes':form['notes'].value,'record_id':record_id}
+                'notes':clean_text(web.input().notes),'record_id':record_id}
         if record_id: 
             q="""UPDATE RECORDS SET notes=$notes
                  WHERE record_id=$record_id"""
