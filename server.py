@@ -247,7 +247,6 @@ class search(object):
             ORDER BY STUDENTS.last_name, STUDENTS.first_name, CLASSES.date
             '''
         students = db.query(q,vars={'search_term':"".join(["%",search_term,'%'])})
-
         return render.search(render.header(),search_term,students)
 
 class students(object):

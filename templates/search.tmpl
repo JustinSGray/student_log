@@ -11,12 +11,13 @@ $:header
     <li style="width:150px;">Phone Number</li>
 </ul>
 $for s in students: 
-    $if s.class_id:
-        <a href="/classes/$s.class_id/students/$s.student_id">
+    $s
+    $if s['CLASSES.class_id']:
+        <a href="/classes/$s['CLASSES.class_id']/students/$s['STUDENTS.student_id']">
     $else: 
-        <a href="/students/$s.student_id">
+        <a href="/students/$s['STUDENTS.student_id']">
     <ul>
-        <li style="width:100px;">$s.student_id</li>
+        <li style="width:100px;">$s['STUDENTS.student_id']</li>
         <li style="width:150px;">$s.first_name</li>
         <li style="width:150px;">$s.last_name </li>
         <li style="width:150px;">$s.phone_number</li>
