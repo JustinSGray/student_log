@@ -17,7 +17,7 @@ student_row_keys = [
 
 def parse_roster(file): 
     #skip initial lines
-    file.readline()    
+    file.readline()  
     file.readline()
     file.readline()
     file.readline()
@@ -26,7 +26,7 @@ def parse_roster(file):
     data = []
     for line in reader: 
         row = {}
-        print "test: ",line
+        #print "test: ",line
         for my_key,their_key in student_row_keys: 
             if my_key == "phone_number": 
                 home = line[their_key[0]]
@@ -46,8 +46,8 @@ def parse_roster(file):
     
     
 if __name__=="__main__":
-    roster = open('K12_CourseRosterOGT.csv','rb')
-    
+    roster = open('K12_CourseRosterOGT.csv','rU')
+
     print parse_roster(roster)
     
     
