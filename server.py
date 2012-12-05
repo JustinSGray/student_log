@@ -4,7 +4,7 @@ from time import strptime,strftime
 import re
 import base64
 import os
-
+import StringIO
 import sys, os
 abspath = os.path.dirname(__file__)
 if abspath: 
@@ -545,10 +545,12 @@ class classes_students(object):
         else: #upload roster 
             params = web.input(roster={})
             file = params['roster']
+            lines = file.file.readlines()
+            lines.replace('\r','')
             
             try: 
                 data = parse_roster(file.file)
-                
+                                
             except KeyError,err: 
                 error = "there was a problem parsing the given csv file. The column, '%s' was not present"%str(err)
                 

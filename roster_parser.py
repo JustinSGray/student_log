@@ -1,5 +1,5 @@
 from csv import DictReader
-
+import io
 
 student_row_keys = [
         ('student_id','SEPID'),
@@ -16,6 +16,9 @@ student_row_keys = [
         ('w_score_in','OGT Wri')]
 
 def parse_roster(file): 
+
+    file = io.StringIO(unicode(file.read()),newline=None)
+
     #skip initial lines
     file.readline()  
     file.readline()
